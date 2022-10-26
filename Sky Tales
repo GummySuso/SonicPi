@@ -1,0 +1,392 @@
+#sky tales
+
+use_bpm 160
+
+define :onfour do
+  in_thread do
+    4.times do
+      sample :drum_heavy_kick, amp: 0.8, lpf: 80
+      sleep [1.5, 1.5, 2, 3].tick
+    end
+  end
+end
+define :nicesn do
+  in_thread do
+    with_fx :reverb, room: 0.2 do
+      2.times do
+        sleep 2
+        sample :sn_dolf, lpf: 100
+        sleep 2
+      end
+    end
+  end
+end
+define :sn_clip do
+  in_thread do
+    2.times do
+      sleep 2
+      sample :sn_dolf, lpf: 80, sustain: 0.25, release: 0
+      sleep 2
+    end
+  end
+end
+define :hhitt do
+  in_thread do
+    8.times do
+      with_fx :slicer, phase: 0.5, pulse_width: 0.2 do |s|
+        control s, phase: [0.25, 0.5].choose
+        with_fx :hpf, cutoff: 130 do |c|
+          control c, cutoff_slide: rrand_i(120, 130)
+          with_fx :reverb, room: 0.2, mix: 0.8 do |r|
+            control r, mix: rrand(0.2, 0.8)
+            use_synth :noise
+            play 1, pan: rrand(-0.75, 0.75)
+            sleep 1
+          end
+        end
+      end
+    end
+  end
+end
+define :hit_speed do
+  in_thread do
+    8.times do
+      with_fx :slicer, phase: 0.5, pulse_width: 0.15 do |s|
+        control s, phase: [0.25, 0.5].choose
+        with_fx :hpf, cutoff: 120 do
+          with_fx :reverb, room: 0.3, mix: 0.5 do
+            use_synth :noise
+            play 1, pan: rrand(-0.75, 0.75)
+            sleep 1
+          end
+        end
+      end
+    end
+  end
+end
+define :cloud_high do
+  in_thread do
+    with_fx :reverb, room: 0.4, mix: 0.3 do
+      2.times do
+        with_fx :level, amp: 1 do |l|
+          control l, amp: [1, 0.5].tick(:ampt)
+          play chord(:e3, :m11)
+          sleep [0.5, 1].tick(:lazy)
+        end
+      end
+      sleep 1.5
+      2.times do
+        with_fx :level, amp: 1 do |l2|
+          control l2, amp: [1, 1.5].tick(:amptt)
+          play chord(:e3-5, :m11)
+          sleep [0.5, 1].tick(:lazyt)
+        end
+      end
+    end
+  end
+end
+define :cloud_low do
+  with_fx :ixi_techno, phase: 2 do
+    in_thread do
+      use_synth :sine
+      8.times do
+        play [:e2, :e3].tick(:fmn), release: [0.4, 0.35, 0.25, 0.35].tick(:fmr), lpf: 110, amp: 1
+        sleep 0.5
+      end
+      4.times do
+        play [:e2-5, :e3-5, :e3-2, :e2-5].tick(:smn), release: [0.8, 1, 0.6, 1].tick(:smr), lpf: 110, amp: 1
+        sleep [1.5, 1, 0.5, 1].tick(:sms)
+      end
+    end
+  end
+end
+define :happydrops do
+  in_thread do
+    with_fx :autotuner, note: :e5 do
+      with_fx :slicer, phase: 0.25, pulse_width: 0.3 do
+        with_fx :reverb, room: 1, mix: 0.9 do
+          sample :ambi_glass_hum, beat_stretch: 8, finish: 0.5, amp: 0.15, pan: 1
+          sample :ambi_glass_hum, beat_stretch: 8, finish: 0.5, amp: 0.15, pan: -1
+          sleep 8
+        end
+      end
+    end
+  end
+end
+define :clic do
+  in_thread do
+    with_fx :echo, phase: 0.33, decay: 2  do
+      with_fx :reverb, mix: 0.6 do
+        sleep 1
+        sample :tabla_dhec, amp: 1.5, lpf: 90, attack: 0.08
+        sleep 7
+      end
+    end
+  end
+end
+define :rainfall  do
+  in_thread do
+    with_fx :reverb, room: 0.6, mix: 0.5 do
+      sample :vinyl_hiss, amp: 0.8, beat_stretch: 24, finish: 0.34, hpf: 80
+      sleep 8
+    end
+  end
+end
+
+define :dark_intro do
+  in_thread do
+    use_synth :saw
+    play [:f1, :f2, :g5, :b6], amp: 1, attack: 16, release: 0
+    sleep 16
+  end
+end
+define :dark_mid do
+  in_thread do
+    8.times do
+      3.times do
+        use_synth :supersaw
+        play [:c1, :c2, :c3].tick, release: 0.25, lpf: 120, amp: 1
+        sleep 0.33
+      end
+    end
+  end
+end
+define :dark_mid_rev do
+  in_thread do
+    16.times do
+      use_synth :sine
+      play [:c4, :c3, :c2, :c1].tick(:notes), release: 0.25, lpf: 100
+      sleep 0.5
+    end
+  end
+end
+define :dark_pulse_hi do
+  in_thread do
+    2.times do
+      use_synth :subpulse
+      play [:c2, :c4], sustain: 4, release: 0.1, lpf: 90, amp: 0.7
+      sleep 4
+    end
+  end
+end
+define :dark_pulse_lo do
+  in_thread do
+    2.times do
+      use_synth :subpulse
+      play [:f2, :f3], sustain: 4, release: 0.1, lpf: 90, amp: 0.7
+      sleep 4
+    end
+  end
+end
+define :bouncy do
+  in_thread do
+    4.times do
+      with_fx :ring_mod, freq: 40, mix: 0.4 do
+        use_synth :tri
+        play_chord [chord(:f4, :dim7),chord(:f4, :madd9)].tick(:chord), amp: 1.5, attack: 0.5, release: 0
+        sleep [1.5, 1.5, 1.5, 2, 1.5].tick(:sleep)
+      end
+    end
+  end
+end
+define :thunder_mv do
+  in_thread do
+    16.times do
+      with_fx :ixi_techno, phase: 8, cutoff_min: 60, cutoff_max: 100, mix: 0.9, res: 0.1 do
+        sample :loop_safari, beat_stretch: 16, num_slices: 8, slice: rand_i(8), amp: 2.5
+        sleep 0.5
+      end
+    end
+  end
+end
+define :light_pulse do
+  in_thread do
+    use_synth :blade
+    with_fx :reverb, room: 0.3, mix: 0.6 do
+      2.times do
+        with_fx :level, amp: 1 do |l|
+          control l, amp: [0.5, 0.8].tick(:ampt)
+          play [:e2, :e3]
+          sleep [0.5, 1].tick(:lazy)
+        end
+      end
+      sleep 1.5
+      2.times do
+        with_fx :level, amp: 1 do |l2|
+          control l2, amp: [0.5, 0.8].tick(:amptt)
+          play [:e2-5, :e3-5]
+          sleep [0.5, 1].tick(:lazyt)
+        end
+      end
+    end
+  end
+end
+define :kicker do
+  in_thread do
+    4.times do
+      sample :drum_heavy_kick, lpf: [60, 80, 90, 100].tick(:lp), amp: 2.25, pan: [-0.25, 0.25].tick(:panner)
+      sleep 2
+    end
+  end
+end
+define :kicker_fast do
+  in_thread do
+    8.times do
+      sample :drum_heavy_kick, lpf: 80, amp: 2.25, sustain: 0.15, release: 0
+      sleep 1
+    end
+  end
+end
+#-----score-----
+rainfall
+sleep 7.5
+cloud_high
+sleep 8
+cloud_high
+sleep 8
+
+cloud_high
+hhitt
+sleep 8
+
+cloud_high
+hhitt
+clic
+sleep 8
+
+2.times do
+  cloud_high
+  happydrops
+  cloud_low
+  onfour
+  nicesn
+  hhitt
+  sleep 8
+end
+
+2.times do
+  happydrops
+  cloud_low
+  hhitt
+  rainfall
+  sleep 8
+end
+
+2.times do
+  cloud_high
+  happydrops
+  cloud_low
+  rainfall
+  onfour
+  nicesn
+  clic
+  hhitt
+  sleep 8
+end
+#-------------transition begins-----------------------
+rainfall
+dark_intro #lasts 16
+sleep 8
+dark_pulse_hi
+rainfall
+sleep 8
+
+4.times do
+  dark_mid
+  dark_pulse_hi
+  rainfall
+  sleep 8
+end
+2.times do
+  dark_pulse_lo
+  rainfall
+  thunder_mv
+  kicker
+  sleep 8
+end
+2.times do
+  dark_pulse_lo
+  rainfall
+  clic
+  thunder_mv
+  bouncy
+  kicker
+  sleep 8
+end
+2.times do
+  dark_mid_rev
+  kicker_fast
+  hit_speed
+  sn_clip
+  sleep 8
+end
+dark_mid_rev
+dark_pulse_hi
+kicker_fast
+sn_clip
+sleep 8
+dark_pulse_lo
+dark_pulse_hi
+sleep 8
+2.times do
+  dark_mid
+  dark_pulse_hi
+  rainfall
+  clic
+  sn_clip
+  hit_speed
+  sleep 8
+end
+#-------change back!-------
+2.times do
+  cloud_high
+  light_pulse
+  rainfall
+  clic
+  hhitt
+  kicker
+  sleep 8
+end
+2.times do
+  cloud_high
+  cloud_low
+  light_pulse
+  happydrops
+  rainfall
+  clic
+  nicesn
+  hhitt
+  kicker
+  sleep 8
+end
+2.times do
+  cloud_high
+  cloud_low
+  light_pulse
+  happydrops
+  rainfall
+  clic
+  nicesn
+  hhitt
+  kicker
+  sleep 8
+end
+cloud_high
+cloud_low
+light_pulse
+happydrops
+rainfall
+sleep 8
+
+cloud_low
+light_pulse
+happydrops
+rainfall
+sleep 8
+2.times do
+  cloud_low
+  rainfall
+  sleep 8
+end
+rainfall
+sleep 8
