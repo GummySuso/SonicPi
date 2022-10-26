@@ -1,0 +1,55 @@
+#berlin
+
+use_bpm 100
+use_random_seed 5
+
+live_loop :boomboom do
+  sample :bd_tek, sustain: 0.25, release: 0.01, amp: 1.5
+  sleep 1
+end
+live_loop :clap_maybe do
+  with_fx :bpf, centre: 85, res: 0.4 do
+    sleep 1
+    sample :sn_generic, amp: 2
+    sleep 1
+  end
+end
+
+live_loop :snare do
+  sleep 1
+  sample :sn_dolf, amp: 0.8
+  sleep 1
+end
+live_loop :crazyhats do
+  with_fx :slicer, phase: 0.25, pulse_width: 0.3, amp: 1.5 do
+    with_fx :hpf, cutoff: 125 do
+      use_synth :noise
+      play 1, pan: rrand(-0.75, 0.75)
+      sleep 1
+    end
+  end
+end
+live_loop :woods do
+  with_fx :reverb, room: 0.2, mix: 0.5 do
+    sample :mehackit_robot4, beat_stretch: 1, rpitch: -8, hpf: 118, amp: 0.5
+    sleep 2
+  end
+end
+
+at 8 do
+  live_loop :reverse_ish do
+    with_fx :wobble, phase: 0.5, phase_offset: 0.25, wave: 1, smooth: 0.5 do
+      use_synth :blade
+      play [54, 54, 57, 61, 62, 54, 62, 66].tick, amp: 0.5, attack: 0.4, sustain: 0.05, release: 0.05
+      sleep [0.5, 1].choose
+    end
+  end
+  live_loop :bass do
+    with_fx :lpf, cutoff: 70 do
+      use_synth :dsaw
+      play [30, 30, 33, 37, 38, 30, 38, 42].tick, amp: 1.25, slide: 0.5, slide_shape: 3
+      sleep 1
+    end
+  end
+end
+
