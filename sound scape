@@ -1,0 +1,39 @@
+#sound scape
+
+use_bpm 105
+
+live_loop :texture do
+  with_fx :hpf, cutoff: 80 do
+    sample :vinyl_hiss, beat_stretch: 4, amp: 0.3
+    sleep 4
+  end
+end
+live_loop :bb do
+  sample :elec_tick
+  sleep 1
+end
+at 16 do
+  live_loop :beat do
+    with_fx :reverb, pre_amp: 0.6, room: 0.3 do
+      sample :drum_cowbell, rate: pitch_to_ratio(-4), amp: 0.2, attack: 0.01, sustain: 0.2, release: 0.1
+      sleep [1, 2].choose
+    end
+  end
+  live_loop :bingbong do
+    with_fx :bpf, centre: 80 do
+      use_synth :pulse
+      n = [(chord :a4, :m7), (chord :f4, :maj9), (chord :g4, :maj9), (chord :c4, :major7)].tick
+      play n, amp: 0.8, attack: 0.5, sustain: 0.5, release: 1
+      sleep 2
+    end
+  end
+  live_loop :wawa do
+    use_synth :beep
+    c1 = (chord :a3, :m)
+    c2 = (chord :f3, :major)
+    c3 = (chord :g3, :major)
+    c4 = (chord :c3, :major)
+    play [c1, c2, c3, c4].choose, amp: 0.5
+    sleep [0.5, 1].choose
+  end
+end
