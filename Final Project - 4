@@ -1,0 +1,298 @@
+#project 4 - final - MIDI out to FL Studio
+
+#discalimer: there are some slight latency issues between the softwares
+
+use_bpm 125
+define :zebralette do
+  in_thread do
+    midi :a5+1, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    midi :c6+1, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    midi :f6, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    sleep 5
+    midi :f5+1, sustain: 2.5, port: "loopbe_internal_midi_1", channel: 1
+    midi :c6+1, sustain: 2.5, port: "loopbe_internal_midi_1", channel: 1
+    sleep 3
+    midi :a5+1, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    midi :d5+1, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    sleep 5
+    midi :f5, sustain: 2.5, port: "loopbe_internal_midi_1", channel: 1
+    midi :a5, sustain: 2.5, port: "loopbe_internal_midi_1", channel: 1
+    midi :c6, sustain: 2.5, port: "loopbe_internal_midi_1", channel: 1
+    sleep 3
+    midi :a5+1, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    midi :c6+1, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    midi :a6+1, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    sleep 5
+    midi :f5+1, sustain: 2.5, port: "loopbe_internal_midi_1", channel: 1
+    midi :c6+1, sustain: 2.5, port: "loopbe_internal_midi_1", channel: 1
+    sleep 3
+    midi :a5+1, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    midi :f5+1, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    midi :d5+1, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    sleep 5
+    midi :f5, sustain: 2.5, port: "loopbe_internal_midi_1", channel: 1
+    midi :a5, sustain: 2.5, port: "loopbe_internal_midi_1", channel: 1
+    midi :c6, sustain: 2.5, port: "loopbe_internal_midi_1", channel: 1
+    sleep 3
+  end
+end
+define :zebra_intro do
+  in_thread do
+    midi :a5+1, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    midi :c6+1, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    midi :f6, sustain: 4, port: "loopbe_internal_midi_1", channel: 1
+    sleep 4
+  end
+end
+define :massive do
+  in_thread do
+    10.times do
+      midi [:f5,:f5+1,:a5+1,:d5+1,:a5,:a6+1,:c6+1,:f6+1,:d5+1,:a5].tick(:a), sustain: rrand(3,4), port: "loopbe_internal_midi_1", channel: 2, vel_f: 0.75
+      sleep [5, 1.5, 4.5, 2, 3, 3, 3.5, 4.5, 2, 3].tick(:a)
+    end
+  end
+end
+define :nexus do
+  in_thread do
+    10.times do
+      midi [:f6, :c6+1, :c6, :c6+1, :a6+1, :f5, :f5+1, :a5+1, :a5, :c6].tick(:a), sustain: 1, port: "loopbe_internal_midi_1", channel: 3, vel_f: rrand(0.5, 0.8)
+      sleep [5, 8, 3, 2, 2, 1, 7, 3, 1, 1].tick(:b)
+    end
+  end
+end
+define :ambi do #was too laggy when loaded in FL so I exported the loop
+  in_thread do
+    with_fx :slicer, phase: 0.1, pulse_width: 0.5, mix: 0.3 do
+      sample "C:/Users/lukka/OneDrive/Desktop/LiveSamples/live4perc.wav", beat_stretch: 32, amp: 2
+      sleep 32
+    end
+  end
+end
+define :sakura do
+  in_thread do
+    64.times do
+      midi scale(:f6, :romanian_minor).choose, sustain: 0.5, vel_f: rrand(0.75,1), channel: 5, port: "loopbe_internal_midi_1" if one_in(2)
+      sleep 0.5
+    end
+  end
+end
+define :b_massive do
+  in_thread do
+    9.times do
+      midi [:a3+1, :f3+1, :d3+1, :f3, :a3+1, :f4, :f3+1, :d3+1, :f3].tick(:a), sustain: [5,3,5,3,3,2,3,5,3].tick(:b), vel_f: 0.75, channel: 15, port: "loopbe_internal_midi_1"
+      sleep [5,3,5,3,3,2,3,5,3].tick(:c)
+    end
+  end
+end
+define :hats do
+  in_thread do
+    32.times do
+      use_synth :cnoise
+      with_fx :slicer, phase: [0.5, 0.5, 0.25, 0.1].choose, pulse_width: 0.15 do
+        with_fx :reverb, room: 0.8, mix: 0.6 do
+          with_fx :rhpf, cutoff: 125, res: 0.2 do
+            play 1, amp: 0.8, pan: rrand(-0.75, 0.75) if one_in(2)
+            sleep 1
+          end
+        end
+      end
+    end
+  end
+end
+define :sharphat do
+  in_thread do
+    32.times do
+      midi rrand(58,62), sustain: 0.5, vel_f: [1,0.8,0.6,0.4].tick(:a), port: "loopbe_internal_midi_1", channel: 14
+      sleep 1
+    end
+  end
+end
+define :kick1 do
+  in_thread do
+    8.times do
+      midi 60, sustain: 0.5, vel_f: 0.8, port: "loopbe_internal_midi_1", channel: 7
+      sleep [3,5].tick(:a)
+    end
+  end
+end
+define :verbclap do
+  in_thread do
+    5.times do
+      midi 60, sustain: 1, port: "loopbe_internal_midi_1", channel: 9
+      sleep [2,8,8,8,6].tick(:b)
+    end
+  end
+end
+define :hardsn do
+  in_thread do
+    8.times do
+      sleep 2
+      midi 60, sustain: 1, vel_f: 0.8, port: "loopbe_internal_midi_1", channel: 10
+      sleep 2
+    end
+  end
+end
+define :boo do
+  use_synth :dtri
+  in_thread do
+    10.times do
+      with_fx :bitcrusher, bits: 16, sample_rate: 12000 do
+        with_fx :reverb, room: 0.6, mix: 0.7 do
+          play [:f6, :c6+1, :c6, :c6+1, :a6+1, :f5, :f5+1, :a5+1, :a5, :c6].tick(:a), attack: 2, release: 0, amp: 0.2
+          sleep [5, 8, 3, 2, 2, 1, 7, 3, 1, 1].tick(:b)
+        end
+      end
+    end
+  end
+end
+define :percsn1 do
+  in_thread do
+    13.times do
+      midi 60, sustain: 1, port: "loopbe_internal_midi_1", channel: 11, pan: rrand(-1,1)
+      sleep [1,4.5, 0.25, 1, 2.75, 4, 2, 2, 5.25, 3.75, 3, 2, 0.5].tick(:a)
+    end
+  end
+end
+define :percsn2 do
+  in_thread do
+    13.times do
+      midi 60, sustain: 1, port: "loopbe_internal_midi_1", channel: 12
+      sleep [4.5,3,5,2.5,0.25,1.75, 3.5, 1.25, 1.75, 5, 2.5, 0.25, 0.75].tick(:a)
+    end
+  end
+end
+define :percy do
+  in_thread do
+    6.times do
+      midi 60, sustain: 1, port: "loopbe_internal_midi_1", channel: 13
+      sleep [2.5, 8, 8, 8, 4, 1.5].tick(:a)
+    end
+  end
+end
+
+#---------score here---------
+zebra_intro
+sleep 4
+massive
+b_massive
+nexus
+boo
+sleep 32
+
+massive
+b_massive
+nexus
+ambi
+kick1
+verbclap
+sleep 32
+
+zebralette
+massive
+b_massive
+nexus
+ambi
+sakura
+hats
+sharphat
+kick1
+verbclap
+hardsn
+percsn1
+percsn1
+percy
+sleep 32
+
+zebralette
+massive
+b_massive
+nexus
+boo
+hats
+sharphat
+kick1
+verbclap
+hardsn
+percsn1
+percsn1
+percy
+sleep 32
+
+zebralette
+massive
+b_massive
+kick1
+verbclap
+hardsn
+sharphat
+sleep 32
+
+zebralette
+nexus
+sharphat
+sleep 32
+
+zebralette
+massive
+b_massive
+nexus
+ambi
+sakura
+hats
+sharphat
+kick1
+verbclap
+hardsn
+percsn1
+percsn1
+percy
+sleep 32
+
+zebralette
+massive
+b_massive
+nexus
+boo
+hats
+sharphat
+kick1
+verbclap
+hardsn
+percsn1
+percsn1
+percy
+sleep 32
+
+
+b_massive
+boo
+hats
+ambi
+sharphat
+kick1
+verbclap
+hardsn
+percsn1
+percsn1
+percy
+sleep 32
+
+massive
+ambi
+nexus
+b_massive
+kick1
+verbclap
+percy
+sleep 32
+
+zebralette
+massive
+nexus
+ambi
+boo
+sleep 32
+
+zebra_intro
+sleep 4
+
