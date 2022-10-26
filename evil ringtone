@@ -1,0 +1,22 @@
+#evil ringtone
+
+use_bpm 115
+
+
+live_loop :gling do
+  with_fx :echo do
+    use_synth :kalimba
+    play (scale :f3, :minor_pentatonic, num_octaves: 3).choose, release: 0.1, amp: 2
+    sleep [0.5, 1].choose
+  end
+end
+sleep 8
+live_loop :downlow do
+  with_fx :distortion, distort: 0.9 do
+    with_fx :lpf, cutoff: 80 do
+      use_synth :prophet
+      play (scale :f2, :minor_pentatonic, num_octaves: 1).choose, amp: 0.9, sustain: 0.5, release: 1
+      sleep 2
+    end
+  end
+end
