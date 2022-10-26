@@ -1,0 +1,44 @@
+#industrial revolution
+
+use_bpm 120
+
+live_loop :Mess do
+  with_fx :echo, decay: 4 do
+    with_fx :bitcrusher, bits: 12  do
+      use_synth :tb303
+      play [45, 48, 52], amp: 0.8, attack: 0.1, sustain: 1, release: 0
+      sleep [3, 2, 3].tick
+    end
+  end
+end
+live_loop :backbumber do
+  use_bpm 180
+  use_synth :mod_tri
+  play [45+12, 48+12, 52+12].tick, amp: 0.2
+  sleep 0.5
+end
+live_loop :flexsnare do
+  with_fx :reverb, room: 0.5, mix: 0.6 do
+    sleep 2
+    sample :sn_generic, amp: 0.6
+    sleep [0.5, 2].choose
+  end
+end
+at 8 do
+  live_loop :drum do
+    sample :drum_heavy_kick
+    sleep [1.5, 1.5, 2, 1.5, 1.5].tick
+  end
+end
+live_loop :hats_mid do
+  sample :drum_cymbal_pedal, pan: rrand(-1, 1)
+  sleep [0.5, 1, rrand_i(1,4)].choose
+end
+at 16 do #just wanted to add some texture pls excuse loop use
+  live_loop :crazyhatts do
+    with_fx :reverb, room: 0.8 do
+      sample :loop_garzul, beat_stretch: 16, amp: 0.3, attack: 2, decay: 2, decay_level: 0.4, sustain: 3.5, release: 8
+      sleep 16
+    end
+  end
+end
