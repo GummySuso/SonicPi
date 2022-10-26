@@ -1,0 +1,33 @@
+#beamed
+
+use_bpm 70
+
+live_loop :chords do
+  with_fx :bitcrusher, bits: 16, cutoff: 85 do
+    use_synth :beep
+    c1 = [:e2, :g2, :d4, :f4+1]
+    c2 = [:b1, :d3, :a3, :c4+1]
+    play [c1, c1, c2, c2].tick, attack: 1, sustain: 2, release: 1
+    sleep 4
+  end
+end
+live_loop :pewpew do
+  with_fx :echo, phase: 0.25, decay: 4, amp: 0.5, mix: 0.5 do
+    sleep 3
+    sample :elec_filt_snare, rate: 3.25, rpitch: rrand(-3, 3), amp: 0.1
+    sleep 1
+  end
+end
+live_loop :rocks do
+  sample :elec_plip, amp: 0.3, pan: rrand(-1, 1)
+  sleep rrand(0.5, 5)
+end
+live_loop :wishywashy do
+  with_fx :hpf, cutoff: 130 do
+    with_fx :flanger, phase: 0.5, phase_offset: 1, wave: 3 do
+      use_synth :noise
+      play 1, attack: 1, decay: 1.75, sustain: 1, release: 0.25, amp: 0.1
+      sleep 4
+    end
+  end
+end
