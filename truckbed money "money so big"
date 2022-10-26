@@ -1,0 +1,98 @@
+#truckbed money
+
+use_bpm 140
+
+live_loop :lead do
+  16.times do
+    with_fx :wobble, phase: 4, smooth: 0.5, mix: 0.1 do
+      with_fx :bpf, centre: 80 do
+        use_synth :chiplead
+        play [59, 57, 56, 61].tick, attack: 0, sustain: 0.5, release: 0, amp: 1.2
+        sleep 1
+      end
+    end
+  end
+  2.times do
+    4.times do
+      with_fx :wobble, phase: 4, smooth: 0.5, mix: 0.1 do
+        with_fx :bpf, centre: 80 do
+          use_synth :chiplead
+          play [59, 57, 66, 61].tick, attack: 0, sustain: 0.5, release: 0, amp: 1.2
+          sleep 0.5
+        end
+      end
+    end
+    8.times do
+      with_fx :wobble, phase: 4, smooth: 0.5, mix: 0.1 do
+        with_fx :bpf, centre: 80 do
+          use_synth :chiplead
+          play [59, 57, 64, 61].tick, attack: 0, sustain: 0.5, release: 0, amp: 1.2
+          sleep 0.5
+        end
+      end
+    end
+    4.times do
+      with_fx :wobble, phase: 4, smooth: 0.5, mix: 0.1 do
+        with_fx :bpf, centre: 80 do
+          use_synth :chiplead
+          play [59, 57, 56, 61].tick, attack: 0, sustain: 0.5, release: 0, amp: 1.2
+          sleep 0.5
+        end
+      end
+    end
+  end
+end
+live_loop :synth do
+  with_fx :reverb, room: 0.6, mix: 0.4 do
+    use_synth :sine
+    play [65, 74, 73].tick(:notes), amp: 0.2, attack: 0.5, sustain: 1, release: 0.5
+    sleep [3, 3, 2].tick(:rest)
+  end
+end
+live_loop :ding do
+  sleep 16
+  8.times do
+    sleep 1
+    use_synth :tb303
+    play [66, 64, 64, 61].tick, amp: 0.2
+    sleep 1
+  end
+end
+live_loop :hats do
+  with_fx :slicer, phase: 0.75, pulse_width: 0.2 do
+    with_fx :hpf, cutoff: 130 do
+      use_synth :noise
+      play 1, pan: rrand(-0.25, 0.25), amp: 3
+      sleep [1, 0.5, 0.5].tick
+    end
+  end
+end
+live_loop :snare do
+  sleep 2
+  sample :sn_dolf, amp: 1.2, pan: -0.2
+  sleep 2
+end
+live_loop :bass do
+  use_synth :dsaw
+  play [29, 29, 38, 38, 37].tick(:thump), amp: 0.8, attack: 0.1, sustain: 1.2, release: 0.2
+  sleep [1.5, 1.5, 1.5, 1.5, 2].tick(:sleep)
+end
+live_loop :kick do
+  sample :bd_tek, sustain: 0.25, attack: 0, release: 0.1, amp: 2
+  sleep [1.5, 1.5, 1.5, 1.5, 2].tick
+end
+with_fx :reverb, room: 0.2, mix: 0.8 do
+  live_loop :revhat do
+    sleep 1
+    sample :drum_cymbal_soft, rate: -1, beat_stretch: 1, attack: 0.01, sustain: 0.9, release: 0.01
+    sleep 3
+  end
+  live_loop :openh do
+    sleep 4
+    2.times do
+      sample :drum_cymbal_open, beat_stretch: 2, amp: 0.5
+      sleep 2
+    end
+  end
+end
+
