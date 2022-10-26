@@ -1,0 +1,29 @@
+#midtone experiment
+
+use_bpm 45
+use_random_seed 404
+
+live_loop :sounds do
+  sample :vinyl_hiss, amp: 0.5
+  sleep sample_duration :vinyl_hiss
+end
+live_loop :wavery1 do
+  use_synth :sine
+  play [rrand(59,61), rrand(62,64), rrand(66,68)], attack: 0.5, sustain: 1, release: 0.5
+  sleep 2
+end
+live_loop :lead do
+  with_fx :reverb do
+    use_synth :pretty_bell
+    play [rrand(59,61), rrand(62,64), rrand(66,68)].tick, amp: 0.2
+    sleep 0.66
+  end
+end
+live_loop :low do
+  with_fx :lpf, cutoff: 100 do
+    use_synth :tb303
+    sleep 1
+    play [rrand(59-24,61-24), rrand(62-24,64-24), rrand(66-24,68-24)], attack: 0.9, sustain: 0, release: 0.1, amp: 1
+    sleep 1
+  end
+end
